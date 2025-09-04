@@ -36,7 +36,7 @@ A **real-time earthquake visualization app** using USGS live data. View recent e
 
 ```bash
 # Clone the repository
-git clone https://github.com/vatanesh/earthquake-visualizer.git
+git clone https://github.com/Vatanesh/Earthquake-Visualizer.git
 cd earthquake-visualizer
 
 # Install dependencies
