@@ -15,14 +15,6 @@ A **real-time earthquake visualization app** using USGS live data. View recent e
 
 ---
 
-## Screenshots
-
-![Map View](screenshots/map-view.png)  
-![Timeline Player](screenshots/timeline-player.png)  
-![Search and Filter](screenshots/search-filter.png)  
-
----
-
 ## Tech Stack
 
 - **Frontend:** React + TypeScript  
