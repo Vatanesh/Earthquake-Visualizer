@@ -9,7 +9,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import type { EarthquakeFeature } from "./types";
 
 export default function App() {
-  const { data, loading, error, refresh } = useEarthquakes();
+  const { data} = useEarthquakes();
   const [collapsed, setCollapsed] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [minMag, setMinMag] = useState(0);
@@ -43,7 +43,7 @@ export default function App() {
       
       
         {/* Search + Refresh */}
-        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2 sm:gap-3 flex-shrink-0 w-full sm:w-auto">
+        <div className="flex flex-col px-4 sm:flex-row justify-between sm:items-center gap-2 sm:gap-3 flex-shrink-0 sm:w-auto">
           <input
             type="text"
             className="search-input px-3 py-2 text-sm sm:text-base w-full sm:w-auto min-w-0"
@@ -52,7 +52,7 @@ export default function App() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button
-            className="btn-primary whitespace-nowrap text-sm sm:text-base flex-shrink-0"
+            className="btn-primary whitespace-nowrap w-[25vw] sm:w-auto text-sm sm:text-base flex-shrink-0"
             onClick={() => window.location.reload()}
           >
             ↻ Refresh
