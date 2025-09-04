@@ -16,7 +16,7 @@ export default function App() {
   const [maxMag, setMaxMag] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [playing, setPlaying] = useState(false);
-  const [speedMs, setSpeedMs] = useState(400);
+  const [speedMs, setSpeedMs] = useState(350);
   const [stepMs, setStepMs] = useState(3600000);
   const [timeline, setTimeline] = useState(Date.now());
 
