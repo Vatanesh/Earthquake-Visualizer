@@ -4,8 +4,6 @@ import type { HProps } from "../types";
 export default function Header({
     onToggleSidebar,
     collapsed,
-    searchTerm,
-    setSearchTerm,
 }: HProps) {
     return (
         // Header.tsx

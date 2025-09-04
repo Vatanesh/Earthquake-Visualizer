@@ -1,5 +1,5 @@
 import React from "react";
-import type { EarthquakeFeature, Props } from "../types";
+import type { Props } from "../types";
 import { magnitudeColor } from "../utils/format";
 import { motion, AnimatePresence } from "framer-motion";
 
