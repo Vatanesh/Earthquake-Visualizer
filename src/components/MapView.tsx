@@ -1,3 +1,4 @@
+// MapView component - Interactive Leaflet map displaying earthquake markers
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { MapContainer, TileLayer, ZoomControl, useMap } from "react-leaflet";
 import type { EarthquakeFeature, MapProps } from "../types";
@@ -6,10 +7,11 @@ import FlyToMarker from "./FlyToMarker";
 import "leaflet/dist/leaflet.css";
 import L, { Map as LeafletMap } from "leaflet";
 
+// Animation timing constants for marker transitions
+const ENTER_MS = 120; // Duration for markers appearing
+const EXIT_MS = 420; // Duration for markers disappearing
 
-const ENTER_MS = 120;
-const EXIT_MS = 420;
-
+// Helper component to provide map reference to parent
 function MapSetter({ mapRef }: { mapRef: React.MutableRefObject<LeafletMap | null> }) {
     const map = useMap();
     useEffect(() => {
@@ -20,19 +22,21 @@ function MapSetter({ mapRef }: { mapRef: React.MutableRefObject<LeafletMap | nul
 }
 
 export default function MapView({ features, selectedId, onPopupClose }: MapProps) {
-    const mapRef = useRef<LeafletMap | null>(null);
+    const mapRef = useRef<LeafletMap | null>(null); // Reference to Leaflet map instance
 
+    // Calculate map center based on first earthquake or default to world view
     const center = useMemo<[number, number]>(() => {
         if (features.length === 0) return [20, 0];
         const f = features[0];
-        return [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+        return [f.geometry.coordinates[1], f.geometry.coordinates[0]]; // Convert lon,lat to lat,lon
     }, [features]);
 
+    // Track visible markers with their animation states
     const [visibleMap, setVisibleMap] = useState<Map<string, { feature: EarthquakeFeature; state: AnimState }>>(
         () => new Map()
     );
 
-    // Diff incoming features -> manage enter/exit states
+    // Handle marker enter/exit animations when features change
     useEffect(() => {
         const nextIds = new Set(features.map((f) => f.id));
         setVisibleMap((prev) => {

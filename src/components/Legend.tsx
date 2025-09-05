@@ -1,7 +1,9 @@
+// Legend component - Color-coded magnitude scale for earthquake markers
 import React from "react";
 import { magnitudeColor } from "../utils/format";
 
 export default function Legend() {
+    // Magnitude scale buckets for the legend
     const buckets = [0, 2, 3, 4, 5, 6];
 
     return (
@@ -11,13 +13,14 @@ export default function Legend() {
                 display: "flex",
                 alignItems: "center",
                 gap: "1rem",
-                overflowX: "auto",
+                overflowX: "auto", // Allow horizontal scrolling on small screens
                 whiteSpace: "nowrap",
-                WebkitOverflowScrolling: "touch", // smooth scrolling on mobile
+                WebkitOverflowScrolling: "touch", // Smooth scrolling on mobile devices
             }}
         >
             <span className="font-semibold flex-shrink-0">&nbsp;Magnitude:</span>
 
+            {/* Render magnitude scale items */}
             {buckets.map((b) => (
                 <div
                     key={b}
@@ -25,7 +28,7 @@ export default function Legend() {
                         display: "inline-flex",
                         alignItems: "center",
                         gap: "0.25rem",
-                        flexShrink: 0,
+                        flexShrink: 0, // Prevent shrinking on small screens
                     }}
                 >
                     <div

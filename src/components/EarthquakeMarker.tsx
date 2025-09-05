@@ -1,21 +1,27 @@
+// EarthquakeMarker component - Individual earthquake marker on the map
 import React from "react";
 import { Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import type { EmProps } from "../types";
-import { magnitudeColor} from "../utils/format";
+import { magnitudeColor } from "../utils/format";
 
 export type AnimState = "entering" | "visible" | "exiting";
+
 export default function EarthquakeMarker({ feature, animState = "visible" }: EmProps) {
+    // Extract earthquake coordinates and properties
     const [lon, lat, depth] = feature.geometry.coordinates;
     const mag = feature.properties.mag ?? 0;
     const place = feature.properties.place ?? feature.properties.title ?? "Event";
 
-    // anim state controls CSS inline properties
+    // Animation state controls for smooth marker transitions
     const opacity = animState === "visible" ? 0.95 : animState === "entering" ? 0.0 : 0.0;
     const scale = animState === "visible" ? 1.0 : animState === "entering" ? 0.6 : 0.5;
     const transition = "transform 450ms cubic-bezier(.22,.9,.38,1), opacity 350ms ease";
 
+    // Dynamic marker size based on earthquake magnitude
     const size = Math.max(8, 8 + mag * 3);
+
+    // Custom HTML marker with dynamic styling
     const html = `
     <div class="marker-inner" style="
       width:${size}px;height:${size}px;border-radius:50%;
@@ -25,8 +31,9 @@ export default function EarthquakeMarker({ feature, animState = "visible" }: EmP
     "></div>
   `;
 
+    // Create Leaflet div icon from HTML
     const icon = L.divIcon({
-        className: "",
+        className: "", // Remove default styling
         html,
         iconSize: [size, size],
         iconAnchor: [size / 2, size / 2],

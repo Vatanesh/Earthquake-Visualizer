@@ -1,3 +1,4 @@
+// Main App component - Entry point for the earthquake visualization app
 import React, { useState, useMemo } from "react";
 import { useEarthquakes } from "./hooks/useEarthquakes";
 import Header from "./components/Header";
@@ -9,55 +10,61 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import type { EarthquakeFeature } from "./types";
 
 export default function App() {
-  const { data} = useEarthquakes();
-  const [collapsed, setCollapsed] = useState(true);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [minMag, setMinMag] = useState(0);
-  const [maxMag, setMaxMag] = useState(10);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [playing, setPlaying] = useState(false);
-  const [speedMs, setSpeedMs] = useState(350);
-  const [stepMs, setStepMs] = useState(3600000);
-  const [timeline, setTimeline] = useState(Date.now());
+  // Fetch earthquake data from USGS API
+  const { data } = useEarthquakes();
 
-  // filter earthquakes
+  // UI state management
+  const [collapsed, setCollapsed] = useState(true); // Controls sidebar visibility
+  const [selectedId, setSelectedId] = useState<string | null>(null); // Currently selected earthquake
+  const [minMag, setMinMag] = useState(0); // Minimum magnitude filter
+  const [maxMag, setMaxMag] = useState(10); // Maximum magnitude filter
+  const [searchTerm, setSearchTerm] = useState(""); // Search filter for location names
+
+  // Timeline player state
+  const [playing, setPlaying] = useState(false); // Timeline animation play/pause
+  const [speedMs, setSpeedMs] = useState(350); // Animation speed in milliseconds
+  const [stepMs, setStepMs] = useState(3600000); // Time step size (1 hour in ms)
+  const [timeline, setTimeline] = useState(Date.now()); // Current timeline position
+
+  // Filter earthquakes based on magnitude, search term, and timeline position
   const filtered = useMemo(() => {
     return data.filter((f) => {
       const mag = f.properties.mag ?? 0;
-      const matchMag = mag >= minMag && mag <= maxMag;
-      const matchSearch = f.properties.place?.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchTime = (f.properties.time ?? 0) <= timeline;
+      const matchMag = mag >= minMag && mag <= maxMag; // Magnitude within range
+      const matchSearch = f.properties.place?.toLowerCase().includes(searchTerm.toLowerCase()); // Location matches search
+      const matchTime = (f.properties.time ?? 0) <= timeline; // Earthquake occurred before current timeline
       return matchMag && matchSearch && matchTime;
     });
   }, [data, minMag, maxMag, searchTerm, timeline]);
 
   return (
+    // Main container with dark theme and flex layout
     <div className="h-screen flex flex-col bg-gray-900 overflow-x-hidden gap-4">
-      {/* Header */}
+      {/* Application header with search and controls */}
       <div className="h-screen"><Header
-        onToggleSidebar={() => setCollapsed((c) => !c)}
+        onToggleSidebar={() => setCollapsed((c) => !c)} // Toggle sidebar visibility
         collapsed={collapsed}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
       /></div>
-      
-      
-        {/* Search + Refresh */}
-        <div className="flex flex-col px-4 sm:flex-row justify-between sm:items-center gap-2 sm:gap-3 flex-shrink-0 sm:w-auto">
-          <input
-            type="text"
-            className="search-input px-3 py-2 text-sm sm:text-base w-full sm:w-auto min-w-0"
-            placeholder="Search place, e.g. 'Japan'"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button
-            className="btn-primary whitespace-nowrap w-[25vw] sm:w-auto text-sm sm:text-base flex-shrink-0"
-            onClick={() => window.location.reload()}
-          >
-            ↻ Refresh
-          </button>
-        </div>
+
+
+      {/* Search + Refresh */}
+      <div className="flex flex-col px-4 sm:flex-row justify-between sm:items-center gap-2 sm:gap-3 flex-shrink-0 sm:w-auto">
+        <input
+          type="text"
+          className="search-input px-3 py-2 text-sm sm:text-base w-full sm:w-auto min-w-0"
+          placeholder="Search place, e.g. 'Japan'"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <button
+          className="btn-primary whitespace-nowrap w-[25vw] sm:w-auto text-sm sm:text-base flex-shrink-0"
+          onClick={() => window.location.reload()}
+        >
+          ↻ Refresh
+        </button>
+      </div>
       {/* Legend panel */}
       <div className="map-legend-wrapper">
         <div
@@ -107,22 +114,22 @@ export default function App() {
         <div className="flex flex-col items-center justify-center gap-4 h-full w-full p-4">
           {/* Map panel */}
           <div className="map-legend-wrapper">
-          <div
-            className="rounded-2xl glass overflow-hidden shadow-xl relative"
-            style={{
-              width: "50%",
-              minWidth: "300px",
-              aspectRatio: "4 / 3",
-              minHeight: "400px",
-            }}
-          >
-            <ErrorBoundary>
-              <MapView
-                features={filtered}
-                selectedId={selectedId}
-                onPopupClose={() => setSelectedId(null)}
-              />
-            </ErrorBoundary>
+            <div
+              className="rounded-2xl glass overflow-hidden shadow-xl relative"
+              style={{
+                width: "50%",
+                minWidth: "300px",
+                aspectRatio: "4 / 3",
+                minHeight: "400px",
+              }}
+            >
+              <ErrorBoundary>
+                <MapView
+                  features={filtered}
+                  selectedId={selectedId}
+                  onPopupClose={() => setSelectedId(null)}
+                />
+              </ErrorBoundary>
             </div>
           </div>
         </div>
@@ -146,4 +153,3 @@ export default function App() {
     </div>
   );
 }
- 

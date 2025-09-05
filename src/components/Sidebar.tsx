@@ -1,9 +1,10 @@
+// Sidebar component - Displays earthquake list with filtering controls
 import React from "react";
 import type { Props } from "../types";
 import { magnitudeColor } from "../utils/format";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Function to brighten a color by a percentage
+// Utility function to brighten a color by a percentage for hover effects
 function brightenColor(color: string, percent: number) {
     const ctx = document.createElement("canvas").getContext("2d");
     if (!ctx) return color;
@@ -18,15 +19,15 @@ function brightenColor(color: string, percent: number) {
 }
 
 export default function Sidebar({
-    features,
-    count,
-    minMag,
-    maxMag,
-    setMinMag,
-    setMaxMag,
-    onSelect,
-    selectedId,
-    onCloseSidebar,
+    features, // Filtered earthquake data to display
+    count, // Total count of earthquakes
+    minMag, // Minimum magnitude filter value
+    maxMag, // Maximum magnitude filter value
+    setMinMag, // Function to update minimum magnitude
+    setMaxMag, // Function to update maximum magnitude
+    onSelect, // Callback when earthquake is selected
+    selectedId, // Currently selected earthquake ID
+    onCloseSidebar, // Function to close the sidebar
 }: Props) {
     return (
         <div className="flex flex-col h-full p-4 bg-black/60 backdrop-blur-lg shadow-xl">
